@@ -1,0 +1,72 @@
+.container {
+    text-align: center;
+    padding: 16px;
+}
+
+.location {
+    font-size: 20px;
+    padding: 3px;
+}
+
+.city {
+    font-size: 38px;
+    padding: 3px;  
+}
+
+.temperature {
+    font-size: 70px;
+    padding: 3px;
+}
+
+.type {
+    font-size: 20px;
+    padding: 3px;
+}
+
+/* Date formatting */
+.date {
+    margin-top: 12px;
+}
+
+/* Weather details container as two columns */
+.details {
+    display: flex;
+    justify-content: center;
+    gap: 100px;
+    margin-top: 16px;
+}
+
+/* Each column styles */
+.details-column {
+    flex: 1;
+    max-width: 300px;
+}
+
+/* Tables inside each column */
+.details-column table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+/* Table cells styling */
+.details-column th, 
+.details-column td {
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    padding: 8px 16px;
+    font-size: 16px;
+    text-align: left;
+}
+
+/* Header cells */
+.details-column th {
+    background-color: rgba(255, 255, 255, 0.1);
+    font-weight: bold;
+}
+
+/* Zebra stripes on even rows */
+.details-column tr:nth-child(even) {
+    background-color: rgba(255, 255, 255, 0.05);
+}
