@@ -1,24 +1,20 @@
-import { useState } from 'react'
 import Navbar from './component/Navbar'
-import Search from './component/Search'
-import Comingdays from './component/Comingdays'
-import Api from './component/Api'
 import WeatherDashboard from './component/WeatherDashboard'
 import {UserContextProvider} from './component/UserContext'
+import './App.css'
 
 function App() {
-
-
   return (
-    <>
     <UserContextProvider>
-     <Navbar/>
-     <Search/>
-     <WeatherDashboard/>
-     <Comingdays/>
-     </UserContextProvider>
-     {/* <Api/> */}
-    </>
+      <div className="app-page">
+        <div className="app-glow app-glow-top" />
+        <div className="app-glow app-glow-bottom" />
+        <main className="app-shell">
+          <Navbar />
+          <WeatherDashboard />
+        </main>
+      </div>
+    </UserContextProvider>
   )
 }
 

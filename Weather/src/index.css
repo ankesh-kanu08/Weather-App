@@ -1,5 +1,56 @@
-* {
-  margin: 2px;
-  padding: 2px;
-  background-color: aquamarine;
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Manrope", "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at 12% 18%, rgba(31, 122, 140, 0.15), transparent 30%),
+    radial-gradient(circle at 86% 12%, rgba(201, 139, 68, 0.14), transparent 28%),
+    linear-gradient(180deg, #f8f4ee, #efe7dc 48%, #f5efe7);
+  color: #1f2c33;
+  line-height: 1.45;
+  overflow-x: hidden;
+}
+
+a {
+  color: inherit;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+button,
+a,
+[role="button"] {
+  cursor: pointer;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
 }

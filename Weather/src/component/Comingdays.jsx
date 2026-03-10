@@ -1,69 +1,76 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Comingdays.css';
-import { AlignCenter } from 'lucide-react';
 
-const Comingdays = ({ forecast = [] }) => {
-  const [selectedIndex, setSelectedIndex] = useState(null);
+const Comingdays = ({ forecast = [], selectedIndex = 0, onSelectDay }) => {
+  const DEG = String.fromCharCode(176);
 
-  if (!forecast || forecast.length === 0) {
-    return null;
-  }
+  if (!forecast.length) return null;
 
-  const leftSide = forecast.slice(0, 5);
-  const rightSide = forecast.slice(5, 10);
+  const outlookDays = forecast.length;
+  const selectedDay = forecast[selectedIndex];
 
-  const renderRows = (days, baseIndex = 0) =>
-    days.map((day, i) => {
-      const idx = baseIndex + i;
-      const isSelected = selectedIndex === idx;
-
-      return (
-        <div
-          key={idx}
-          className={`comingdays-row ${isSelected ? 'selected' : ''}`}
-          onClick={() => setSelectedIndex(selectedIndex === idx ? null : idx)}
-          style={{ cursor: 'pointer' }}
-        >
-          <div className="row-main">
-            <span className="col-date">{day.date}</span>
-            <span className="col-condition">
-              <img
-                src={day.day.condition.icon}
-                alt={day.day.condition.text}
-                style={{ verticalAlign: 'middle', marginRight: '6px' }}
-              />
-              {day.day.condition.text}
-            </span>
-          </div>
-        </div>
-      );
+  const formatDay = (date) =>
+    new Date(date).toLocaleDateString(undefined, {
+      weekday: 'short',
+      month: 'short',
+      day: 'numeric',
     });
 
-  const selectedDay = selectedIndex !== null ? forecast[selectedIndex] : null;
-
   return (
-    <div className="comingdays-container">
-      <h3 className="comingdays-header" >Coming Days Forecast</h3>
-      <div className={`comingdays-table three-columns ${selectedDay ? 'with-details' : ''}`}>
-        <div className="column left-column">{renderRows(leftSide, 0)}</div>
+    <section id="outlook-section" className="comingdays-container">
+      <div className="section-head">
+        <div className="section-title-wrap">
+          <p className="section-kicker">Extended Trend</p>
+          <h3>{outlookDays}-Day Outlook</h3>
+        </div>
+        <p>Extended forecast trend and day-by-day detail.</p>
+      </div>
+
+      <div className="comingdays-layout">
+        <div className="days-list">
+          {forecast.map((day, idx) => {
+            const isSelected = idx === selectedIndex;
+            return (
+              <button
+                key={day.date}
+                type="button"
+                className={`comingdays-row ${isSelected ? 'selected' : ''}`}
+                onClick={() => onSelectDay?.(idx)}
+              >
+                <div className="row-main">
+                  <span className="col-date">{formatDay(day.date)}</span>
+                  <span className="col-condition">
+                    <img src={day.day.condition.icon} alt={day.day.condition.text} />
+                    {day.day.condition.text}
+                  </span>
+                </div>
+                <span className="col-temp">
+                  {Math.round(day.day.maxtemp_c)}{DEG} / {Math.round(day.day.mintemp_c)}{DEG}
+                </span>
+              </button>
+            );
+          })}
+        </div>
 
         {selectedDay && (
-          <div className="details-panel">
-            <h4>Details for {selectedDay.date}</h4>
-            <p><strong>Max Temp:</strong> {selectedDay.day.maxtemp_c}°C</p>
-            <p><strong>Min Temp:</strong> {selectedDay.day.mintemp_c}°C</p>
-            <p><strong>Humidity:</strong> {selectedDay.day.avghumidity}%</p>
-            <p><strong>UV Index:</strong> {selectedDay.day.uv}</p>
-            <p><strong>Sunrise:</strong> {selectedDay.astro.sunrise}</p>
-            <p><strong>Sunset:</strong> {selectedDay.astro.sunset}</p>
-            <p><strong>Chance of Rain:</strong> {selectedDay.day.daily_chance_of_rain}%</p>
-          </div>
+          <aside className="details-panel">
+            <h4>{new Date(selectedDay.date).toLocaleDateString(undefined, { weekday: 'long', month: 'long', day: 'numeric' })}</h4>
+            <div className="details-grid">
+              <div><span>Condition</span><strong>{selectedDay.day.condition.text}</strong></div>
+              <div><span>Max Temp</span><strong>{Math.round(selectedDay.day.maxtemp_c)}{DEG}C</strong></div>
+              <div><span>Min Temp</span><strong>{Math.round(selectedDay.day.mintemp_c)}{DEG}C</strong></div>
+              <div><span>Humidity</span><strong>{selectedDay.day.avghumidity}%</strong></div>
+              <div><span>UV Index</span><strong>{selectedDay.day.uv}</strong></div>
+              <div><span>Chance of Rain</span><strong>{selectedDay.day.daily_chance_of_rain}%</strong></div>
+              <div><span>Sunrise</span><strong>{selectedDay.astro.sunrise}</strong></div>
+              <div><span>Sunset</span><strong>{selectedDay.astro.sunset}</strong></div>
+            </div>
+          </aside>
         )}
-
-        <div className="column right-column">{renderRows(rightSide, 5)}</div>
       </div>
-    </div>
+    </section>
   );
 };
 
 export default Comingdays;
+

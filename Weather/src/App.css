@@ -1,0 +1,84 @@
+:root {
+  --bg: #f4efe6;
+  --surface: rgba(255, 251, 245, 0.72);
+  --surface-strong: rgba(255, 249, 241, 0.9);
+  --surface-soft: rgba(250, 244, 236, 0.72);
+  --border: rgba(58, 83, 89, 0.12);
+  --text: #1f2c33;
+  --muted: #627279;
+  --accent: #1f7a8c;
+  --accent-strong: #165c68;
+  --accent-soft: #d8ece8;
+  --warm: #c98b44;
+  --shadow: 0 20px 50px rgba(31, 44, 51, 0.12);
+  --radius-lg: 28px;
+  --radius-md: 18px;
+}
+
+.app-page {
+  min-height: 100vh;
+  padding: 32px 16px 40px;
+  position: relative;
+  overflow-x: clip;
+}
+
+.app-shell {
+  width: min(1080px, 100%);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  position: relative;
+  z-index: 2;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.app-shell > * {
+  max-width: 100%;
+  min-width: 0;
+}
+
+.app-glow {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(70px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app-glow-top {
+  width: 420px;
+  height: 420px;
+  background: rgba(31, 122, 140, 0.16);
+  top: -160px;
+  right: -120px;
+  animation: pulseGlow 8s ease-in-out infinite;
+}
+
+.app-glow-bottom {
+  width: 360px;
+  height: 360px;
+  background: rgba(201, 139, 68, 0.14);
+  left: -120px;
+  bottom: -150px;
+  animation: pulseGlow 10s ease-in-out infinite reverse;
+}
+
+@keyframes pulseGlow {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.08);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 700px) {
+  .app-page {
+    padding: 18px 12px 26px;
+  }
+}

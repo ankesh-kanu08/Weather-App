@@ -1,72 +1,191 @@
-.container {
+.current-panel {
+  background:
+    linear-gradient(135deg, rgba(255, 249, 241, 0.94), rgba(247, 241, 234, 0.84)),
+    linear-gradient(180deg, rgba(216, 236, 232, 0.24), transparent);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: 24px;
+  animation: panelIn 0.5s ease both;
+  scroll-margin-top: 100px;
+  backdrop-filter: blur(18px);
+}
+
+.current-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(58, 83, 89, 0.08);
+}
+
+.current-copy {
+  display: grid;
+  gap: 8px;
+}
+
+.place {
+  margin: 0;
+  color: var(--accent);
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.current-head h2 {
+  margin: 3px 0 6px;
+  color: var(--text);
+  font-size: clamp(1.75rem, 2.8vw, 2.5rem);
+}
+
+.local-time {
+  margin: 0;
+  color: var(--muted);
+}
+
+.summary-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.summary-pill {
+  min-width: 0;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(31, 122, 140, 0.12);
+  background: rgba(255, 255, 255, 0.6);
+  display: grid;
+  gap: 2px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+.summary-pill span {
+  color: var(--muted);
+  font-size: 0.74rem;
+}
+
+.summary-pill strong {
+  color: var(--text);
+  font-size: 0.92rem;
+}
+
+.temperature-block {
+  min-width: min(100%, 240px);
+  text-align: center;
+  background: linear-gradient(160deg, rgba(216, 236, 232, 0.72), rgba(255, 255, 255, 0.65));
+  border: 1px solid rgba(31, 122, 140, 0.14);
+  border-radius: 24px;
+  padding: 18px 20px;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+}
+
+.temperature-label {
+  margin: 0 0 8px;
+  color: var(--accent-strong);
+  text-transform: uppercase;
+  letter-spacing: 1.4px;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.main-temp {
+  margin: 6px 0 0;
+  font-size: clamp(2.6rem, 6vw, 3.8rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--text);
+}
+
+.condition {
+  margin: 3px 0 0;
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.temperature-meta {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+}
+
+.metric-card {
+  background: rgba(255, 255, 255, 0.58);
+  border: 1px solid rgba(58, 83, 89, 0.08);
+  border-radius: 16px;
+  padding: 14px;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+  min-width: 0;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32);
+}
+
+.metric-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(31, 122, 140, 0.32);
+  box-shadow: 0 14px 22px rgba(31, 44, 51, 0.08);
+}
+
+.metric-label {
+  margin: 0 0 6px;
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.3px;
+}
+
+.metric-value {
+  margin: 0;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 1000px) {
+  .current-head {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 760px) {
+  .current-panel {
+    padding: 18px;
+  }
+
+  .current-head {
+    flex-direction: column;
     text-align: center;
-    padding: 16px;
-}
+  }
 
-.location {
-    font-size: 20px;
-    padding: 3px;
-}
+  .current-copy {
+    justify-items: center;
+  }
 
-.city {
-    font-size: 38px;
-    padding: 3px;  
-}
-
-.temperature {
-    font-size: 70px;
-    padding: 3px;
-}
-
-.type {
-    font-size: 20px;
-    padding: 3px;
-}
-
-/* Date formatting */
-.date {
-    margin-top: 12px;
-}
-
-/* Weather details container as two columns */
-.details {
-    display: flex;
-    justify-content: center;
-    gap: 100px;
-    margin-top: 16px;
-}
-
-/* Each column styles */
-.details-column {
-    flex: 1;
-    max-width: 300px;
-}
-
-/* Tables inside each column */
-.details-column table {
+  .temperature-block {
     width: 100%;
-    border-collapse: collapse;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-radius: 8px;
-    overflow: hidden;
+  }
 }
 
-/* Table cells styling */
-.details-column th, 
-.details-column td {
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 8px 16px;
-    font-size: 16px;
-    text-align: left;
+@media (max-width: 460px) {
+  .metrics-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
 }
 
-/* Header cells */
-.details-column th {
-    background-color: rgba(255, 255, 255, 0.1);
-    font-weight: bold;
-}
-
-/* Zebra stripes on even rows */
-.details-column tr:nth-child(even) {
-    background-color: rgba(255, 255, 255, 0.05);
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -1,106 +1,132 @@
-import React, { useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './Today.css';
 
-const Today = ({ forecast, localTime }) => {
-  const cityHour = new Date(localTime).getHours(); // Local hour of searched city
+const Today = ({ forecast = [], localTime, selectedDate }) => {
+  const DEG = String.fromCharCode(176);
+  const baseLocalTime = useMemo(() => new Date(localTime).getTime(), [localTime]);
+  const [elapsedMs, setElapsedMs] = useState(0);
+  const localDate = useMemo(() => new Date(baseLocalTime + elapsedMs), [baseLocalTime, elapsedMs]);
+  const cityHour = localDate.getHours();
+  const forecastRef = useRef(null);
+  const isCurrentDay =
+    Boolean(selectedDate) && localDate.toISOString().slice(0, 10) === selectedDate;
 
-  const [selectedIndex, setSelectedIndex] = useState(null);
+  useEffect(() => {
+    setElapsedMs(0);
+    const startedAt = Date.now();
+    const intervalId = setInterval(() => {
+      setElapsedMs(Date.now() - startedAt);
+    }, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [baseLocalTime]);
+
+  const initialSelectedIndex = useMemo(() => {
+    if (!forecast.length) return 0;
+    if (!isCurrentDay) return 0;
+
+    const matchIndex = forecast.findIndex(({ time }) => new Date(time).getHours() === cityHour);
+    return matchIndex >= 0 ? matchIndex : 0;
+  }, [forecast, cityHour, isCurrentDay]);
+
+  const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex);
+
+  useEffect(() => {
+    setSelectedIndex(initialSelectedIndex);
+  }, [initialSelectedIndex]);
+
+  useEffect(() => {
+    const container = forecastRef.current;
+    if (!container) return;
+
+    const activeCard = container.children[initialSelectedIndex];
+    if (!activeCard) return;
+
+    const centeredOffset =
+      activeCard.offsetLeft - container.clientWidth / 2 + activeCard.clientWidth / 2;
+
+    container.scrollTo({
+      left: Math.max(0, centeredOffset),
+      behavior: 'smooth',
+    });
+  }, [initialSelectedIndex, forecast]);
 
   const formatTime = (timeString) => {
     const date = new Date(timeString);
-    const hours = date.getHours();
-    const suffix = hours >= 12 ? 'PM' : 'AM';
-    const displayHour = hours % 12 === 0 ? 12 : hours % 12;
-    return `${displayHour}${suffix}`;
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+    const meridiem = date.getHours() >= 12 ? 'PM' : 'AM';
+
+    return `${hours}:${minutes} ${meridiem}`;
   };
 
-  return (
-    <div className="weather-card">
-      <h3>Today's 24-Hour Forecast</h3>
-      <div className="forecast">
-        {forecast.map(({ time, temp_c, condition, wind_kph, wind_dir, humidity, feelslike_c, precip_mm, pressure_mb, cloud, uv, vis_km, dewpoint_c }, index) => {
-          const forecastHour = new Date(time).getHours();
-          const isNow = forecastHour === cityHour;
+  const selectedHour = forecast[selectedIndex];
 
+  if (!forecast.length) return null;
+
+  return (
+    <section id="hourly-section" className="hourly-panel">
+      <div className="section-head">
+        <div className="section-title-wrap">
+          <p className="section-kicker">Hourly Window</p>
+          <h3>24-Hour Forecast</h3>
+        </div>
+        <p>
+          {selectedDate
+            ? `${new Date(selectedDate).toLocaleDateString(undefined, {
+                weekday: 'long',
+                month: 'short',
+                day: 'numeric',
+              })} hourly detail`
+            : 'Tap any hour to inspect detailed conditions.'}
+        </p>
+      </div>
+
+      <div ref={forecastRef} className="forecast">
+        {forecast.map(({ time, temp_c, condition, chance_of_rain }, index) => {
+          const forecastHour = new Date(time).getHours();
+          const isNow = isCurrentDay && forecastHour === cityHour;
           const isSelected = selectedIndex === index;
 
           return (
-            <div key={index}>
-              <div
-                className={`forecast-item ${isNow ? 'now-highlight' : ''}`}
-                onClick={() => setSelectedIndex(isSelected ? null : index)}
-                style={{ cursor: 'pointer' }}
-              >
-                <span>{formatTime(time)}</span>
-                <span>{Math.round(temp_c)}°C</span>
-                <div className="desc-icon">
-                  <img
-                    src={`https:${condition.icon}`}
-                    alt={condition.text}
-                    width={24}
-                    height={24}
-                    style={{ marginRight: '6px' }}
-                  />
-                  <span style={{ fontSize: '14px', fontWeight: 'normal' }}>
-                    {condition.text}
-                  </span>
-                </div>
-              </div>
-
-              {isSelected && (
-                <div className="hourly-details">
-                  <table>
-                    <tbody>
-                      <tr>
-                        <th>Temperature</th>
-                        <td>{Math.round(temp_c)}°C</td>
-                      </tr>
-                      <tr>
-                        <th>Feels Like</th>
-                        <td>{Math.round(feelslike_c)}°C</td>
-                      </tr>
-                      <tr>
-                        <th>Wind</th>
-                        <td>{wind_kph} km/h {wind_dir}</td>
-                      </tr>
-                      <tr>
-                        <th>Humidity</th>
-                        <td>{humidity}%</td>
-                      </tr>
-                      <tr>
-                        <th>Precipitation</th>
-                        <td>{precip_mm} mm</td>
-                      </tr>
-                      <tr>
-                        <th>Pressure</th>
-                        <td>{pressure_mb} mb</td>
-                      </tr>
-                      <tr>
-                        <th>Cloud Cover</th>
-                        <td>{cloud}%</td>
-                      </tr>
-                      <tr>
-                        <th>UV Index</th>
-                        <td>{uv}</td>
-                      </tr>
-                      <tr>
-                        <th>Visibility</th>
-                        <td>{vis_km} km</td>
-                      </tr>
-                      <tr>
-                        <th>Dew Point</th>
-                        <td>{dewpoint_c}°C</td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
-              )}
-            </div>
+            <button
+              key={time}
+              type="button"
+              className={`forecast-item ${isNow ? 'now-highlight' : ''} ${isSelected ? 'selected' : ''}`}
+              onClick={() => setSelectedIndex(index)}
+            >
+              <span className="hour">{formatTime(time)}</span>
+              <img src={`https:${condition.icon}`} alt={condition.text} width={28} height={28} />
+              <span className="temp">{Math.round(temp_c)}{DEG}C</span>
+              <span className="cond">{condition.text}</span>
+              <span className="rain">{chance_of_rain}% rain</span>
+            </button>
           );
         })}
       </div>
-    </div>
+
+      {selectedHour && (
+        <div className="hourly-details">
+          <h4>
+            {new Date(selectedHour.time).toLocaleDateString(undefined, { weekday: 'long' })}, {formatTime(selectedHour.time)}
+          </h4>
+          <div className="detail-grid">
+            <div><span>Temperature</span><strong>{Math.round(selectedHour.temp_c)}{DEG}C</strong></div>
+            <div><span>Feels Like</span><strong>{Math.round(selectedHour.feelslike_c)}{DEG}C</strong></div>
+            <div><span>Wind</span><strong>{selectedHour.wind_kph} km/h {selectedHour.wind_dir}</strong></div>
+            <div><span>Humidity</span><strong>{selectedHour.humidity}%</strong></div>
+            <div><span>Precipitation</span><strong>{selectedHour.precip_mm} mm</strong></div>
+            <div><span>Pressure</span><strong>{selectedHour.pressure_mb} mb</strong></div>
+            <div><span>Cloud Cover</span><strong>{selectedHour.cloud}%</strong></div>
+            <div><span>UV Index</span><strong>{selectedHour.uv}</strong></div>
+            <div><span>Visibility</span><strong>{selectedHour.vis_km} km</strong></div>
+            <div><span>Dew Point</span><strong>{Math.round(selectedHour.dewpoint_c)}{DEG}C</strong></div>
+          </div>
+        </div>
+      )}
+    </section>
   );
 };
 
 export default Today;
+
