@@ -9,6 +9,7 @@ const Search = ({ embedded = false }) => {
   const [activeIndex, setActiveIndex] = useState(-1);
   const [loading, setLoading] = useState(false);
   const skipNextFetchRef = useRef(false);
+  const blurTimeoutRef = useRef(null);
   const API_KEY = 'ed28347106824df8977180413250408';
 
   const shouldShowSuggestions = useMemo(
@@ -67,6 +68,12 @@ const Search = ({ embedded = false }) => {
     };
   }, [input]);
 
+  useEffect(() => {
+    return () => {
+      clearTimeout(blurTimeoutRef.current);
+    };
+  }, []);
+
   const chooseSuggestion = (entry) => {
     const selected = `${entry.name}${entry.region ? `, ${entry.region}` : ''}, ${entry.country}`;
     skipNextFetchRef.current = true;
@@ -123,7 +130,8 @@ const Search = ({ embedded = false }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             onBlur={() => {
-              setTimeout(() => {
+              clearTimeout(blurTimeoutRef.current);
+              blurTimeoutRef.current = setTimeout(() => {
                 setSuggestions([]);
                 setActiveIndex(-1);
               }, 120);

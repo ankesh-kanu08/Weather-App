@@ -1,45 +1,32 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react';
 import './Today.css';
+import useLiveLocalTime from './useLiveLocalTime';
 
 const Today = ({ forecast = [], localTime, selectedDate }) => {
   const DEG = String.fromCharCode(176);
-  const baseLocalTime = useMemo(() => new Date(localTime).getTime(), [localTime]);
-  const [elapsedMs, setElapsedMs] = useState(0);
-  const localDate = useMemo(() => new Date(baseLocalTime + elapsedMs), [baseLocalTime, elapsedMs]);
+  const localDate = useLiveLocalTime(localTime);
   const cityHour = localDate.getHours();
   const forecastRef = useRef(null);
   const isCurrentDay =
     Boolean(selectedDate) && localDate.toISOString().slice(0, 10) === selectedDate;
-
-  useEffect(() => {
-    setElapsedMs(0);
-    const startedAt = Date.now();
-    const intervalId = setInterval(() => {
-      setElapsedMs(Date.now() - startedAt);
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [baseLocalTime]);
-
-  const initialSelectedIndex = useMemo(() => {
+  const defaultSelectedIndex = useMemo(() => {
     if (!forecast.length) return 0;
     if (!isCurrentDay) return 0;
 
     const matchIndex = forecast.findIndex(({ time }) => new Date(time).getHours() === cityHour);
     return matchIndex >= 0 ? matchIndex : 0;
   }, [forecast, cityHour, isCurrentDay]);
-
-  const [selectedIndex, setSelectedIndex] = useState(initialSelectedIndex);
+  const [selectedIndex, setSelectedIndex] = useState(defaultSelectedIndex);
 
   useEffect(() => {
-    setSelectedIndex(initialSelectedIndex);
-  }, [initialSelectedIndex]);
+    setSelectedIndex(defaultSelectedIndex);
+  }, [defaultSelectedIndex, selectedDate, forecast]);
 
   useEffect(() => {
     const container = forecastRef.current;
     if (!container) return;
 
-    const activeCard = container.children[initialSelectedIndex];
+    const activeCard = container.children[defaultSelectedIndex];
     if (!activeCard) return;
 
     const centeredOffset =
@@ -49,7 +36,7 @@ const Today = ({ forecast = [], localTime, selectedDate }) => {
       left: Math.max(0, centeredOffset),
       behavior: 'smooth',
     });
-  }, [initialSelectedIndex, forecast]);
+  }, [defaultSelectedIndex, selectedDate, forecast]);
 
   const formatTime = (timeString) => {
     const date = new Date(timeString);

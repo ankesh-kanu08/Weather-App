@@ -1,22 +1,10 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import './Current.css';
+import useLiveLocalTime from './useLiveLocalTime';
 
 const Current = ({ current, location, forecast }) => {
   const DEG = String.fromCharCode(176);
-  const baseLocalTime = useMemo(() => new Date(location.localtime).getTime(), [location.localtime]);
-  const [elapsedMs, setElapsedMs] = useState(0);
-
-  useEffect(() => {
-    setElapsedMs(0);
-    const startedAt = Date.now();
-    const intervalId = setInterval(() => {
-      setElapsedMs(Date.now() - startedAt);
-    }, 1000);
-
-    return () => clearInterval(intervalId);
-  }, [baseLocalTime]);
-
-  const now = new Date(baseLocalTime + elapsedMs);
+  const now = useLiveLocalTime(location.localtime);
   const formattedDate = now.toLocaleDateString(undefined, {
     weekday: 'long',
     month: 'long',
