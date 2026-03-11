@@ -10,7 +10,7 @@ const Search = ({ embedded = false }) => {
   const [loading, setLoading] = useState(false);
   const skipNextFetchRef = useRef(false);
   const blurTimeoutRef = useRef(null);
-  const API_KEY = 'ed28347106824df8977180413250408';
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
   const shouldShowSuggestions = useMemo(
     () => input.trim().length >= 2 && suggestions.length > 0,
@@ -66,7 +66,7 @@ const Search = ({ embedded = false }) => {
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [input]);
+  }, [API_KEY, input]);
 
   useEffect(() => {
     return () => {

@@ -13,7 +13,7 @@ const WeatherDashboard = () => {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const days = 10;
 
-  const API_KEY = 'ed28347106824df8977180413250408';
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
   useEffect(() => {
     if (!city) return;
@@ -47,7 +47,7 @@ const WeatherDashboard = () => {
       });
 
     return () => controller.abort();
-  }, [city]);
+  }, [API_KEY, city]);
 
   if (error) {
     return (

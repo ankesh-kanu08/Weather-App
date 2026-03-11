@@ -100,6 +100,7 @@ const WeatherMap = ({ location, current }) => {
   const conditionAccent = getConditionAccent(current);
   const [boundaryGeoJson, setBoundaryGeoJson] = useState(null);
   const skipBoundaryHighlight = location.name.toLowerCase() === 'gandhinagar';
+  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
   const boundaryQuery = useMemo(
     () => `${location.name}${location.region ? `, ${location.region}` : ''}, ${location.country}`,
     [location.name, location.region, location.country]
