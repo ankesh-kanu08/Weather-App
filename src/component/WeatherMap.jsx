@@ -99,12 +99,18 @@ const WeatherMap = ({ location, current }) => {
   const aqiMeta = getAqiMeta(current.air_quality);
   const conditionAccent = getConditionAccent(current);
   const [boundaryGeoJson, setBoundaryGeoJson] = useState(null);
+  const skipBoundaryHighlight = location.name.toLowerCase() === 'gandhinagar';
   const boundaryQuery = useMemo(
     () => `${location.name}${location.region ? `, ${location.region}` : ''}, ${location.country}`,
     [location.name, location.region, location.country]
   );
 
   useEffect(() => {
+    if (skipBoundaryHighlight) {
+      setBoundaryGeoJson(null);
+      return;
+    }
+
     const controller = new AbortController();
 
     const loadBoundary = async () => {
@@ -143,7 +149,7 @@ const WeatherMap = ({ location, current }) => {
     loadBoundary();
 
     return () => controller.abort();
-  }, [boundaryQuery]);
+  }, [boundaryQuery, skipBoundaryHighlight]);
 
   const pollutantCards = [
     { label: 'PM2.5', value: current.air_quality?.pm2_5?.toFixed?.(1) ?? 'N/A' },
