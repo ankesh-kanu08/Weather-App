@@ -6,7 +6,7 @@ const UserContext = createContext();
 
 // Create provider component
 export const UserContextProvider = ({ children }) => {
-  const [city, setCity] = useState("London"); // Default city
+  const [city, setCity] = useState("Gandhinagar, Gujarat, India"); // Default city
 
   return (
     <UserContext.Provider value={{ city, setCity }}>

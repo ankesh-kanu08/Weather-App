@@ -19,7 +19,7 @@ const Navbar = () => {
     <header className="site-header">
       <div className="site-brand">
         <p className="site-kicker">Regional Forecast Center</p>
-        <h1>WeatherScope</h1>
+        <h1>MeghBodh</h1>
       </div>
 
       <div className="site-search">

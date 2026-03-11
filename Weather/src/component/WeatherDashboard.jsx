@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import Today from './Today';
 import Current from './Current';
 import Comingdays from './Comingdays';
+import WeatherMap from './WeatherMap';
 import UserContext from './UserContext';
 import './WeatherDashboard.css';
 
@@ -72,6 +73,8 @@ const WeatherDashboard = () => {
   return (
     <section className="dashboard-grid">
       <Current current={weatherData.current} location={weatherData.location} forecast={weatherData.forecast} />
+
+      <WeatherMap current={weatherData.current} location={weatherData.location} />
 
       <Today
         forecast={activeDay?.hour ?? []}
