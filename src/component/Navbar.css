@@ -9,8 +9,6 @@
   align-items: center;
   gap: 18px;
   backdrop-filter: blur(18px);
-  position: sticky;
-  top: 12px;
   z-index: 15;
   animation: fadeSlideIn 0.55s ease both;
 }
