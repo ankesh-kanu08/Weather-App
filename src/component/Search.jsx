@@ -65,7 +65,7 @@ const Search = ({ embedded = false }) => {
       clearTimeout(timeoutId);
       controller.abort();
     };
-  }, [API_KEY, input]);
+  }, [input]);
 
   useEffect(() => {
     return () => {
