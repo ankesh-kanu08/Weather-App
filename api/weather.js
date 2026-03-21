@@ -1,9 +1,9 @@
 export default async function handler(req, res) {
   const { city, days = 10 } = req.query;
-  const API_KEY = process.env.WEATHER_API_KEY;
+  const API_KEY = process.env.WEATHER_API_KEY || process.env.VITE_WEATHER_API_KEY;
 
   if (!API_KEY) {
-    return res.status(500).json({ error: 'API key not configured' });
+    return res.status(500).json({ error: 'API key not configured. Set WEATHER_API_KEY in Vercel env vars.' });
   }
 
   if (!city) {
