@@ -45,6 +45,9 @@ const Search = ({ embedded = false }) => {
           return res.json();
         })
         .then((data) => {
+          if (data?.error) {
+            throw new Error(typeof data.error === 'string' ? data.error : data.error.message || 'Unknown search API error');
+          }
           if (!Array.isArray(data)) {
             setSuggestions([]);
             return;

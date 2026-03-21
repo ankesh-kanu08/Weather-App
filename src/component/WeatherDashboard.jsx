@@ -31,8 +31,12 @@ const WeatherDashboard = () => {
         return res.json();
       })
       .then(data => {
-        if (data?.error?.message) {
-          throw new Error(data.error.message);
+        if (data?.error) {
+          const message =
+            typeof data.error === 'string'
+              ? data.error
+              : data.error.message ?? 'Unknown weather API error';
+          throw new Error(message);
         }
         setWeatherData(data);
       })
