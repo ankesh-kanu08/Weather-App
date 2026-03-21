@@ -13,8 +13,6 @@ const WeatherDashboard = () => {
   const [selectedDayIndex, setSelectedDayIndex] = useState(0);
   const days = 10;
 
-  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
-
   useEffect(() => {
     if (!city) return;
     setError(null);
@@ -22,9 +20,7 @@ const WeatherDashboard = () => {
     setSelectedDayIndex(0);
     const controller = new AbortController();
 
-    const API_URL = `https://api.weatherapi.com/v1/forecast.json?key=${API_KEY}&q=${encodeURIComponent(
-      city
-    )}&days=${days}&aqi=yes&alerts=yes`;
+    const API_URL = `/api/weather?city=${encodeURIComponent(city)}&days=${days}`;
 
     fetch(API_URL, {
       signal: controller.signal,
@@ -47,7 +43,7 @@ const WeatherDashboard = () => {
       });
 
     return () => controller.abort();
-  }, [API_KEY, city]);
+  }, [city]);
 
   if (error) {
     return (

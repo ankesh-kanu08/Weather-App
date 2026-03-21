@@ -119,9 +119,7 @@ const WeatherMap = ({ location, current }) => {
 
       try {
         const response = await fetch(
-          `https://nominatim.openstreetmap.org/search?format=jsonv2&q=${encodeURIComponent(
-            boundaryQuery
-          )}&polygon_geojson=1&polygon_threshold=0.01&limit=1&accept-language=en`,
+          `/api/geocode?q=${encodeURIComponent(boundaryQuery)}`,
           {
             signal: controller.signal,
             cache: 'no-store',

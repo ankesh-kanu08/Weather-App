@@ -10,7 +10,6 @@ const Search = ({ embedded = false }) => {
   const [loading, setLoading] = useState(false);
   const skipNextFetchRef = useRef(false);
   const blurTimeoutRef = useRef(null);
-  const API_KEY = import.meta.env.VITE_WEATHER_API_KEY;
 
   const shouldShowSuggestions = useMemo(
     () => input.trim().length >= 2 && suggestions.length > 0,
@@ -35,7 +34,7 @@ const Search = ({ embedded = false }) => {
     const timeoutId = setTimeout(() => {
       setLoading(true);
       fetch(
-        `https://api.weatherapi.com/v1/search.json?key=${API_KEY}&q=${encodeURIComponent(query)}`,
+        `/api/search?q=${encodeURIComponent(query)}`,
         {
           signal: controller.signal,
           cache: 'no-store',
