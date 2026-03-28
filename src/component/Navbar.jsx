@@ -24,7 +24,7 @@ const Navbar = () => {
           alt="MeghBodh logo"
         />
         <div className="site-brand-copy">
-          <p className="site-kicker">Regional Forecast Center</p>
+          <p className="site-kicker">Divine insight into Weather</p>
           <h1>MeghBodh</h1>
         </div>
       </div>
