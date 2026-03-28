@@ -13,6 +13,25 @@
   animation: fadeSlideIn 0.55s ease both;
 }
 
+.site-brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+}
+
+.site-logo {
+  width: clamp(54px, 7vw, 72px);
+  height: clamp(54px, 7vw, 72px);
+  object-fit: contain;
+  border-radius: 18px;
+  flex-shrink: 0;
+}
+
+.site-brand-copy {
+  min-width: 0;
+}
+
 .site-kicker {
   margin: 0;
   color: var(--accent);
@@ -83,6 +102,14 @@
   .site-header {
     grid-template-columns: 1fr;
     align-items: stretch;
+  }
+
+  .site-brand {
+    justify-content: center;
+  }
+
+  .site-brand-copy {
+    text-align: left;
   }
 
   .site-nav {

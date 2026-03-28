@@ -18,8 +18,15 @@ const Navbar = () => {
   return (
     <header className="site-header">
       <div className="site-brand">
-        <p className="site-kicker">Regional Forecast Center</p>
-        <h1>MeghBodh</h1>
+        <img
+          className="site-logo"
+          src="/MeghBodhLgo.png"
+          alt="MeghBodh logo"
+        />
+        <div className="site-brand-copy">
+          <p className="site-kicker">Regional Forecast Center</p>
+          <h1>MeghBodh</h1>
+        </div>
       </div>
 
       <div className="site-search">
